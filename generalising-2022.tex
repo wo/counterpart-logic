@@ -273,7 +273,7 @@ To model this sort of situations, we need to allow for different ways of
 locating the individuals from one world at another world. Formally, we will have
 multiple counterpart relations. One relation will link Dee and Dum to their
 counterparts in the left copy, another to their counterparts in the right copy.
-$\Box Gab$ will be true iff, \emph{on every counterpart relation}, all
+$\Box Gab$ will be true iff, \emph{relative to every counterpart relation}, all
 counterparts of $a$ are $G$-related to all counterparts of $b$.%
 \footnote{\label{fn-multicr}%
   \cite{hazen79counterpart} introduces models with multiple counterpart
@@ -449,8 +449,8 @@ convenient to think of these as truth-values.)
 \end{definition}
 
 \begin{definition}[Variant]\label{!VARIANT}
-  A variable assignment $g'$ is an \emph{$x$-variant of an assignment $g$ on a
-    set $S$} if $g(x) \in S$ and $g'(y) = g(y)$ for all variables $y$ other than
+  A variable assignment $g'$ is an \emph{$x$-variant of an assignment $g$ on} a
+    set $S$ if $g(x) \in S$ and $g'(y) = g(y)$ for all variables $y$ other than
   $x$.
 \end{definition}
 
@@ -543,7 +543,8 @@ accessibility relation $R$.
   types of counterpart relation, for different sorts, perhaps.%
 } %
 
-Validity is truth at all points of evaluation under all interpretations:
+Validity is truth at all points of evaluation under all interpretations. We
+allow partial assignment functions for negative logics.
 
 \begin{definition}[Validity]{\label{!VALIDITY}}
   A set of $\Sc{L}$-formulas $\Gamma$ is \emph{positively valid} in a set
@@ -595,16 +596,16 @@ aspect of a scenario in which $\Sc{L}$-formulas are interpreted.
 One could get around this by replacing the variable assignments $g$ in the
 semantics by infinite sequences of individuals $\t{d_{1},d_{2},\ldots}$, with
 the understanding that the first individual $d_{1}$ is the value of the
-alphabetically first variable, and so on. A second problem would still remain:
+alphabetically first variable, and so on. A second problem would remain:
 we would have to put the same kinds of constraints on the $\Img$ relation that
 we want to put on counterpart relations between sequences, and these constraints
 are easier to understand if the $\Img$ relation is derived from $R$ and
 $K$. \label{p:tarski-semantics}
 
 \begin{lemma}[Locality lemma]\label{locality}
-  Let $A$ be an $\Sc{L}$-formula, $w$ a world in a counterpart model $\Fr{M}$,
-  and $g, g'$ assignments on $U_{w}$ such that $g(x) = g'(x)$ for every variable
-  $x$ that is free in $A$. Then
+  Let $A$ be an $\Sc{L}$-formula, $w$ a world in a counterpart model
+  $\Fr{M} = \t{W,R,U,D,K,I}$, and $g, g'$ assignments on $U_{w}$ such that
+  $g(x) = g'(x)$ for every variable $x$ that is free in $A$. Then
   \[
   \Fr{M},w,g \SAT A \text{ iff } \Fr{M},w,g' \SAT A.
   \]
@@ -612,40 +613,37 @@ $K$. \label{p:tarski-semantics}
 
 \begin{proof}
   by induction on $A$. 
-  FIXME
   \begin{enumerate}
-  \item For atomic formulas, the claim is guaranteed directly by
-    definition \ref{!SAT}.
-  \item $A$ is $\neg B$.\; $w,V \SAT \neg B$ iff $w,V \not\SAT B$ by
-    definition \ref{!SAT}, iff $w,V' \not\SAT B$ by induction
-    hypothesis, iff $w,V' \SAT \neg B$ by definition \ref{!SAT}.
-  \item $A$ is $B \then C$.\; $w,V \SAT B \then C$ iff $w,V \not\SAT
-    B$ or $w,V \SAT C$ by definition \ref{!SAT}, iff $w,V' \not\SAT B$
-    or $w,V' \SAT C$ by induction hypothesis, iff $w,V' \SAT B \then
-    C$ by definition \ref{!SAT}.
-  \item $A$ is $\forall x B$.\; By definition \ref{!SAT}, $w,V \SAT
-    \forall x B$ iff $w,V^* \SAT B$ for all existential $x$-variants
-    $V^*$ of $V$ on $w$. Each such $x$-variant $V^*$ agrees at $w$
-    with the $x$-variant ${V'}^*$ of $V'$ on $w$ such that ${V'}^*(x)
-    = V^*(x)$ on all variables in $B$. Conversely, each existential
-    $x$-variant ${V'}^*$ of $V'$ on $w$ agrees at $w$ with the
-    $x$-variant $V^*$ of $V$ on $w$ with $V^*(x) = {V'}^*(x)$ on all
-    variables in $B$. So by induction hypothesis, $w,V^* \SAT B$ for
-    all existential $x$-variants $V^*$ of $V$ on $w$ iff $w,{V'}^*
-    \SAT B$ for all existential $x$-variants ${V'}^*$ of $V'$ on $w$,
-    iff $w,V' \SAT \forall x B$ by definition \ref{!SAT}.
-  \item $A$ is $\Box B$.\; By definition \ref{!SAT}, $w,V \SAT \Box B$
-    iff $w',V^* \SAT B$ for all $w',V^*$ such that $wRw'$ and $V_w\Img
-    V^*_{w'}$, where $V_w\Img V^*_{w'}$ means that there is a $C \in
-    K_{w,w'}$ such that for every variable $x$, either
-    $V_w(x)CV_{w'}^*(x)$ or $V_w(x)$ has no $C$-counterpart at $w'$
-    and $V_{w'}^*(x)$ is undefined. Since $V_w(x) = V_w'(x)$ for all
-    variables $x$, each $w'$-image of $V$ at $w$ agrees with some
-    $w'$-image of $V'$ on all variables in $B$ and vice versa. So by
-    induction hypothesis, $w',V^* \SAT B$ for all $w',V^*$ such that
-    $wRw'$ and $V_w \Img V^*_{w'}$ iff $w',{V'}^* \SAT B$ for all
-    $w',{V'}^*$ such that $wRw'$ and $V_w \Img {V'}^*_{w'}$, iff $w,V'
-    \SAT \Box B$ by definition \ref{!SAT}. \qed
+    \item For atomic formulas, the claim is guaranteed directly by definition
+          \ref{!SAT}.
+    \item $A$ is $\neg B$.\; $\Fr{M},w,g \SAT \neg B$ iff
+          $\Fr{M},w,g \not\SAT B$ by definition \ref{!SAT}, iff
+          $\Fr{M},w,g' \not\SAT B$ by induction hypothesis, iff
+          $\Fr{M},w,g' \SAT \neg B$ by definition \ref{!SAT}.
+    \item $A$ is $B \then C$.\; $\Fr{M},w,g \SAT B \then C$ iff
+          $\Fr{M},w,g \not\SAT B$ or $\Fr{M},w,g \SAT C$ by definition
+          \ref{!SAT}, iff $\Fr{M},w,g' \not\SAT B$ or $\Fr{M},w,g' \SAT C$ by
+          induction hypothesis, iff $\Fr{M},w,g' \SAT B \then C$ by definition
+          \ref{!SAT}.
+    \item $A$ is $\forall x B$.\; By definition \ref{!SAT},
+          $\Fr{M},w,g \SAT \forall x B$ iff $\Fr{M},w,g^{[x\mapsto d]} \SAT B$
+          for all $d \in D_{w}$, where $g^{[x\mapsto d]}$ is the $x$-variant of
+          $g$ that maps $x$ to $d$. For each $d \in D_{w}$, $g^{[x\mapsto d]}$
+          and ${g'}^{[x\mapsto d]}$ assign the same value to every variable in
+          $B$. So by induction hypothesis, $\Fr{M},w,g^{[x\mapsto d]} \SAT B$
+          for all $d \in D_{w}$ iff $\Fr{M},w,{g'}^{[x\mapsto d]} \SAT B$ for
+          all $d \in D_{w}$, iff $\Fr{M},w,g' \SAT \forall x B$ by definition
+          \ref{!SAT}.
+    \item $A$ is $\Box B$.\; By definition \ref{!SAT}, $\Fr{M},w,g \SAT \Box B$
+          iff $\Fr{M},w',g^{*} \SAT B$ for all $w'$ with $wRw'$ and $g^{*}$ for which
+          there is a $C \in K_{w,w'}$ such that for every variable $x$, either
+          $g(x)Cg^{*}(x)$ or $g(x)$ has no $C$-counterpart at $w'$ and $g^{*}(x)$ is
+          undefined. Since $g(x) = g'(x)$ for all variables $x$ in $B$, each $w'$-image
+          of $g$ at $w$ agrees with some $w'$-image of $g'$ on all variables in
+          $B$ and vice versa. So by induction hypothesis, $\Fr{M},w',g^{*} \SAT B$
+          for all $\Fr{M},w',g^{*}$ such that $w,g \Img w',g^{*}$ iff
+          $\Fr{M},w',{g'}^{*} \SAT B$ for all $w',{g'}^*$ such that $w,g' \Img w',{g'}^{*}$, iff
+          $\Fr{M},w,g' \SAT \Box B$ by definition \ref{!SAT}. \qed
   \end{enumerate}
 \end{proof}
 
@@ -657,7 +655,7 @@ domain $U_w$ of every world $w$ that doesn't satisfy any predicates.
 \begin{definition}[Positive transpose]{\label{!TRANSPOSE}}
   The \emph{positive transpose} $\Fr{M}^+$ of a counterpart model
   $\Fr{M} = \t{W,R,U,D,K,I}$ is the model $\t{W,R,U^+,D,K^+,I}$ with $U^+$,
-  $K^+$, and $I^{+}$ constructed as follows.
+  $K^+$ constructed as follows.
 
   Let $o$ be an arbitrary individual (say, the smallest ordinal) not in
   $\bigcup_w D_w$. For all $w\in W$, $U^+_w = U_w \cup \{ o \}$.
@@ -669,117 +667,109 @@ domain $U_w$ of every world $w$ that doesn't satisfy any predicates.
   \cmnt{%
     (So in particular, $C^+$ contains $\t{o,o}$.)%
   } %
+
+  The \emph{positive transpose} $g^{+}$ of an assignment function $g$ for
+  $\Fr{M}$ is the function that ``completes'' $g$ by setting
+  \[
+    g^{+}(x) = \begin{cases}
+                 g(x) &\text{if $g(x)$ is defined}\\
+                 o &\text{otherwise}
+               \end{cases}
+  \]
 \end{definition}
 
 \begin{lemma}[Truth-preservation under transposes]{\label{transpose}}
-  If $\Fr{M}^{+}$ is the positive transpose of a counterpart model $\Fr{M}$,
-  then for any world $w$ in $\Fr{M}$, any assignment $g$ on $U_{w}$, and any
-  formula $A$ of $\Sc{L}$,
+  If $\Fr{M}^{+} = \t{W,R,U^{+},D,K^{+},I}$ is the positive transpose of a
+  counterpart model $\Fr{M} = \t{W,R,U,D,K,I}$, then for any world $w$ in
+  $\Fr{W}$, any assignment $g$ on $U_{w}$ with positive transpose $g^{+}$, and
+  any formula $A$ of $\Sc{L}$,
   \[
-  \Fr{M},w,g \SAT A \text{ iff } \Fr{M}^{+},w,g \SAT A.
+  \Fr{M},w,g \SAT A \text{ iff } \Fr{M}^{+},w,g^{+} \SAT A.
   \]
 \end{lemma}
 \begin{proof}
-  FIXME
   by induction on $A$.
   \begin{enumerate}
-  \item $A$ is $Px_1\ldots x_n$. By definition \ref{!SAT}, $w,V
-    \SAT_{\Fr{S}} Px_1\ldots x_n$ iff $\t{V_w(x_1),\ldots,V_w(x_n)}
-    \in V_w(P)$. If all $V_w(x_i)$ are defined, then $V_w^+(x_i) =
-    V_w(x_i)$ and $V_w^+(P) = V_w(P)$ by definition \ref{!TRANSPOSE},
-    and so $\t{V_w(x_1),\ldots,V_w(x_n)} \in V_w(P)$ iff
-    $\t{V_w^+(x_1),\ldots,V_w^+(x_n)} \in V_w^+(P)$, i.e.\ iff $w,V^+
-    \SAT_{\Fr{S}^+} Px_1\ldots x_n$. If some $V_w(x_i)$ is undefined,
-    then $\t{V_w(x_1),\ldots,V_w(x_n)}$ is undefined and not in
-    $V_w(P)$; so $w,V \not\SAT_{\Fr{S}} Px_1\ldots x_n$. Moreover, in
-    this case $V^+_w(x_i) = o$ and since $V_w(P) = V_w^+(P)$ never
-    contains any tuples involving $o$,
-    $\t{V_w^+(x_1),\ldots,V_w^+(x_n)} \not\in V_w^+(P)$. So either
-    way, $w,V \not\SAT_{\Fr{S}} Px_1\ldots x_n$ iff $w,V^+
-    \SAT_{\Fr{S}^+} Px_1\ldots x_n$.
-  \item $A$ is $\neg B$.\; $w,V \SAT_{\Fr{S}} \neg B$ iff $w,V
-    \not\SAT_{\Fr{S}} B$ by definition \ref{!SAT}, iff $w,V^+
-    \not\SAT_{\Fr{S}^+} B$ by induction hypothesis, iff $w,V^+
-    \SAT_{\Fr{S}^+} \neg B$ by definition \ref{!SAT}.
-  \item $A$ is $B \then C$.\; $w,V \SAT_{\Fr{S}} B \then C$ iff $w,V
-    \not\SAT_{\Fr{S}} B$ or $w,V \SAT_{\Fr{S}} C$ by definition
-    \ref{!SAT}, iff $w,V^+ \not\SAT_{\Fr{S}^+} B$ or $w,V^+
-    \SAT_{\Fr{S}^+} C$ by induction hypothesis, iff $w,V^+
-    \SAT_{\Fr{S}^+} B \then C$ by definition \ref{!SAT}.
-  \item $A$ is $\forall x B$.\; By definition \ref{!SAT}, $w,V
-    \SAT_{\Fr{S}} \forall x B$ iff $w,V' \SAT_{\Fr{S}} B$ for all
-    existential $x$-variants $V'$ of $V$ on $w$. These $x$-variants
-    $V'$ of $V$ correspond one-one to the $x$-variants ${V^+}'$ of
-    $V^+$ with ${V^+}'_w(x) = V'_w(x)$. Moreover, for each such pair
-    $V', {V^+}'$, $\t{\Fr{S}^+,{V^+}'}$ is the positive transpose of
-    $\t{\Fr{S},V'}$. By induction hypothesis, $w,V' \SAT_{\Fr{S}} B$
-    iff $w,{V^+}' \SAT_{\Fr{S}^+} B$. And so $w,V \SAT_{\Fr{S}}
-    \forall x B$ iff $w,{V^+}' \SAT_{\Fr{S}^+} B$ for all existential
-    $x$-variants ${V^+}'$ of $V^+$ on $w$, iff $w,V^+ \SAT_{\Fr{S}^+}
-    \forall x B$ by definition \ref{!SAT}.
+    \item $A$ is $Px_1\ldots x_n$. By definition \ref{!SAT},
+          $\Fr{M},w,g \SAT Px_1\ldots x_n$ iff
+          $\t{g(x_1),\ldots,g(x_n)} \in I_w(P)$. Since $\Fr{M}$ and $\Fr{M}^{+}$
+          have the same interpretation function $I$, we have to show that
+          $\t{g(x_1),\ldots,g(x_n)} \in I_w(P)$ iff
+          $\t{g^{+}(x_1),\ldots,g^{+}(x_n)} \in I_w(P)$. If $g(x_{i})$ is
+          defined for all $x_{1},\ldots, x_{n}$ then this follows from the fact
+          that $g^{+}(x_{i}) = g(x_{i})$. If some $g(x_{i})$ is undefined then
+          $\t{g(x_1),\ldots,g(x_n)}$ is undefined and not in $I_w(P)$. Moreover,
+          we then have $g^+(x_i) = o$ and since $I_{w}(P)$ doesn't contains any
+          tuples involving $o$, $\t{g^+(x_1),\ldots,g^+(x_n)} \not\in g^+(P)$.
+    \item $A$ is $\neg B$.\; $\Fr{M},w,g \SAT \neg B$ iff
+          $\Fr{M},w,g \not\SAT B$ by definition \ref{!SAT}, iff
+          $\Fr{M}^{+},w,g^+ \not\SAT B$ by induction hypothesis, iff
+          $\Fr{M}^{+},w,g^+ \SAT \neg B$ by definition \ref{!SAT}.
+    \item $A$ is $B \then C$.\; $\Fr{M},w,g \SAT B \then C$ iff
+          $\Fr{M},w,g \not\SAT B$ or $\Fr{M},w,g \SAT C$ by definition
+          \ref{!SAT}, iff $\Fr{M}^{+},w,g^+ \not\SAT B$ or $\Fr{M}^{+},w,g^+ \SAT C$ by
+          induction hypothesis, iff $\Fr{M}^{+},w,g^+ \SAT B \then C$ by definition
+          \ref{!SAT}.
+    \item $A$ is $\forall x B$.\; By definition \ref{!SAT},
+          $\Fr{M},w,g \SAT \forall x B$ iff $\Fr{M},w,g^{[x\mapsto d]} \SAT B$
+          for all $d \in D_{w}$, where $g^{[x\mapsto d]}$ is the $x$-variant of
+          $g$ that maps $x$ to $d$. For each $d \in D_{w}$, ${g^+}^{[x\mapsto d]}$
+          is the positive transpose of ${g}^{[x\mapsto d]}$. So by induction hypothesis, $\Fr{M},w,g^{[x\mapsto d]} \SAT B$ for all $d \in D_{w}$ iff $\Fr{M},w,{g^{+}}^{[x\mapsto d]} \SAT B$ for
+          all $d \in D_{w}$, iff $\Fr{M}^{+},w,g^{+} \SAT \forall x B$ by definition
+          \ref{!SAT}.
+    \item $A$ is $\Box B$.\; Assume $\Fr{M},w,g \SAT \Box B$. By definition
+          \ref{!SAT}, this means that $\Fr{M},w',g' \SAT B$ for all $w',g'$ with
+          $w,g \Img w',g'$.
+          We need to show that $\Fr{M}^{+},w', {g^+}' \SAT B$ for all
+          $w',{g^+}'$ with $w,g^{+} \Img w',{g^{+}}'$. So let $w',{g^+}'$ be
+          such that $w,g \Img w',{g^{+}}'$. Since $g^+$ is total and $\Fr{M}^+$
+          a positive structure, this means that for every variable $x$ there is
+          a $C^+ \in K^+_{w,w'}$ with $g^+(x)C^+{g^+}'(x)$. Let $g'$ be the
+          assignment on $U_{w'}$ that coincides with ${g^+}'$ except that
+          $g'(x)$ is undefined for every variable $x$ for which
+          ${g^+}'(x) = o$. Let $C = \{ \t{d,d'} \in C^{+} : d \not=o \text{ and
+          } d'\not=o \}$. Now let $x$ be any variable. Assume that there are $d,d'$ with $g(x)=d$ and $dCd'$.
+          Then $g^+(x) = d$ and $dC^+d'$ and thus ${g^+}'(x) \not= o$, for
+          $\t{d,o} \in C^+$ only if there is no $d'$ with $\t{d,d'} \in C$. So
+          $g'(x) = {g^+}'(x)$, and $g(x)Cg'(x)$. On the other hand, assume there
+          are no $d,d'$ with $g(x)=d$ and $dCd'$, either because $g(x)$ is
+          undefined or because $g(x)=d$ and the only $d'$ with
+          $\t{d,d'} \in C^+$ is $o$. Either way, then ${g^+}'(x) = o$, and so
+          $g'(x)$ is undefined. So for all variables $x$, if there are $d,d'$
+          with $g(x)=d$ and $dCd'$ then $g(x)Cg'(x)$, otherwise $g'(x)$ is
+          undefined. Since $C \in K_{w,w'}$ by construction of $K^+$ (definition
+          \ref{!TRANSPOSE}), this means that $w,g \Img w',g'$. But ${g^+}'$ is
+          the positive transpose of $g'$. So we've shown that whenever
+          $w,g^+ \Img w',{g^+}'$, then there is a $g'$ such that ${g^+}'$ is the
+          positive transpose of $g'$ and $w,g \Img w',g'$. We know that
+          $\Fr{M},w',g' \SAT B$. So by induction hypothesis, $w',{g^+}' \SAT B$. That
+          is, for each $w',{g^+}'$ with $w,g \Img w',g'$, $w',{g^+}' \SAT B$. By
+          definition \ref{!SAT}, this means that $w, g^+ \SAT \Box B$.
 
-  \item $A$ is $\Box B$.\; Assume $w,V \SAT_{\Fr{S}} \Box B$. By
-    definition \ref{!SAT}, this means that $w',V' \SAT_{\Fr{S}} B$ for
-    all $w',V'$ with $wRw'$ and $V_w\Img V'_{w'}$. We need to show
-    that $w',{V^+}' \SAT_{\Fr{S}^+} B$ for all $w',{V^+}'$ with $wRw'$
-    and $V^+_w\Img {V^+}'_{w'}$. So let $w',{V^+}'$ be such that
-    $wRw'$ and $V^+_w \Img {V^+}'_{w'}$. Since $V^+$ is a total
-    interpretation and $\Fr{S}^+$ a total structure, this means that
-    for every variable $x$ there is a $C^+ \in K^+_{w,w'}$ with
-    $V_w^+(x)C^+{V^+}'_{w'}(x)$. Let $V'$ be the interpretation on
-    $\Fr{S}$ that coincides with ${V^+}'$ except that $V'_w(x)$ is
-    undefined for every world $w\in W$ and variable $x$ for which
-    ${V^+}'_w(x) = o$. Let $C = \{ \t{d,d'} \in C : d \not=o \text{
-      and } d'\not=o \}$. Now assume there are $d,d'$ with $V_w(x)=d$
-    and $dCd'$. Then $V^+_w(x) = d$ and $dC^+d'$ and thus
-    ${V^+}'_{w'}(x) \not= o$, for $\t{d,o} \in C^+$ only if there is
-    no $d'$ with $\t{d,d'} \in C$. So $V'_{w'}(x) = {V^+}'_{w'}(x)$,
-    and $V_w(x)CV'_{w'}(x)$. On the other hand, assume there are no
-    $d,d'$ with $V_w(x)=d$ and $dCd'$, either because $V_w(x)$ is
-    undefined or because $V_w(x)=d$ and the only $d'$ with $\t{d,d'}
-    \in C^+$ is $o$. Either way, then ${V^+}'_{w'}(x) = o$, and so
-    $V'_{w'}(x)$ is undefined. So for all variables $x$, if there are
-    $d,d'$ with $V_w(x)=d$ and $dCd'$ then $V_w(x)CV'_{w'}(x)$,
-    otherwise $V'_{w'}(x)$ is undefined. Since $C \in K_{w,w'}$ by
-    construction of $K^+$ (definition \ref{!TRANSPOSE}), this means
-    that $V_w \Img V'_{w'}$. But ${V^+}'$ is the positive transpose of
-    $V'$. So we've shown that whenever $V^+_w \Img {V^+}'_{w'}$, then
-    there is a $V'$ such that ${V^+}'$ is the positive transpose of
-    $V'$ and $V_w \Img V'_{w'}$. We know that $w',V' \SAT_{\Fr{S}}
-    B$. So by induction hypothesis, $w',{V^+}' \SAT_{\Fr{S}^+}
-    B$. That is, for each $w',{V^+}'$ with $wRw'$ and $V^+_w \Img
-    {V^+}'_{w'}$, $w',{V^+}' \SAT_{\Fr{S}^+} B$. By definition
-    \ref{!SAT}, this means that $w, V^+ \SAT_{\Fr{S}^+} \Box B$.
-
-    In the other direction, assume $w, V^+ \SAT_{\Fr{S}^+} \Box
-    B$. That is, $w',{V^+}' \SAT_{\Fr{S}^+} B$ for each $w',{V^+}'$
-    with $wRw'$ and $V^+_w \Img {V^+}'_{w'}$. We have to show that
-    $w',V' \SAT_{\Fr{S}} B$ for all $w',V'$ with $wRw'$ and $V_w\Img
-    V'_{w'}$. So let $w',V'$ be such that $wRw'$ and $V_w\Img
-    V'_{w'}$. The latter means that there is a $C \in K_{w,w'}$ such
-    that for every variable $x$, either $V_w(x)CV_{w'}'(x)$ or
-    $V_w(x)$ has no $C$-counterpart at $w'$ and $V_{w'}'(x)$ is
-    undefined. Let ${V'}^+$ be the positive transform of $V'$.  Let
-    $C^+ = C \cup \{ \t{d,o} : d\in U^+_{w}$ and there is no $d'\in
-    U_{w'}$ with $dCd'$ $\}$. By definition \ref{!TRANSPOSE}, $C^+ \in
-    K^+_{w,w'}$. For any variable $x$, if $V_w(x)CV_{w'}'(x)$, then
-    both $V_w(x)$ and $V_{w'}'(x)$ are defined and thus $V_w^+(x) =
-    V_w(x)$ and ${V'}^+_{w'}(x) = V'_{w'}(x)$ by definition
-    \ref{!TRANSPOSE}; moreover, then $V_w^+(x)C^+{V'}^+_{w'}(x)$ since
-    $C \subseteq C^+$. On the other hand, if $V_w(x)$ has no
-    $C$-counterpart at $w'$, so that $V'_{w'}(x)$ is undefined, then
-    by construction of $C^+$ and $V_w^+$, $V_w^+(x)$ (which equals
-    $V_w(x)$ if $V_w(x)$ is defined, else $o$) has $o$ as
-    $C^+$-counterpart at $w'$; and ${V'}^+_{w'}(x)=o$; so again
-    $V_w^+(x)C^+{V'}^+_{w'}(x)$. So for every variable $x$, there is a
-    $C^+ \in K^+_{w,w'}$ with $V_w^+(x)C^+{V'}^+_{w'}(x)$, and so
-    $V^+_w \Img {V'}^+_{w'}$. Now we know that $w',{V^+}'
-    \SAT_{\Fr{S}^+} B$ for all $w',{V^+}'$ with $wRw'$ and $V^+_w \Img
-    {V^+}'_{w'}$. Hence $w',{V'}^+ \SAT_{\Fr{S}^+} B$. By induction
-    hypothesis, $w',V' \SAT_{\Fr{S}} B$. So we've shown that whenever
-    $wRw'$ and $V_w \Img V'_{w'}$, then $w',V' \SAT_{\Fr{S}} B$. By
-    definition \ref{!SAT}, this means that $w,V \SAT_{\Fr{S}} \Box
-    B$. \qed
+          In the other direction, assume $\Fr{M}^{+},w, g^+ \SAT \Box B$. That
+          is, $\Fr{M}^{+},w',{g^+}' \SAT B$ for each $w',{g^+}'$ with
+          $w,g^{+} \Img w',{g^+}'$. We have to show that $\Fr{M},w',g' \SAT B$
+          for all $w',g'$ with $w,g \Img w',g'$. So let $w',g'$ be such that
+          $w,g \Img w',g'$. Then there is a $C \in K_{w,w'}$ such that for every
+          variable $x$, either $g(x)Cg'(x)$ or $g(x)$ has no $C$-counterpart at
+          $w'$ and $g'(x)$ is undefined. Let ${g'}^+$ be the positive transform
+          of $g'$. Let $C^+ = C \cup \{ \t{d,o} : d\in U^+_{w}$ and there is no
+          $d'\in U_{w'}$ with $dCd'$ $\}$. By definition \ref{!TRANSPOSE},
+          $C^+ \in K^+_{w,w'}$. For any variable $x$, if $g(x)Cg'(x)$ then both
+          $g(x)$ and $g'(x)$ are defined and thus $g^+(x) = g(x)$ and
+          ${g'}^+(x) = g'(x)$ by definition \ref{!TRANSPOSE}; moreover, then
+          $g^+(x)C^+{g'}^+(x)$ since $C \subseteq C^+$. On the other hand, if
+          $g(x)$ has no $C$-counterpart at $w'$, so that $g'(x)$ is undefined,
+          then by construction of $C^+$ and $g^+$, $g^+(x)$ (which equals $g(x)$
+          if $g(x)$ is defined, else $o$) has $o$ as $C^+$-counterpart at $w'$;
+          and ${g'}^+(x)=o$; so again $g^+(x)C^+{g'}^+(x)$. So for every
+          variable $x$, there is a $C^+ \in K^+_{w,w'}$ with
+          $g^+(x)C^+{g'}^+(x)$, and so $w,g^+ \Img w',{g'}^+$. Now we know that
+          $\Fr{M}^{+},w',{g^+}' \SAT B$ for all $w',{g^+}'$ with
+          $w,g \Img w',{g^+}'$. Hence $\Fr{M}^{+},w',{g'}^+ \SAT B$. By
+          induction hypothesis, $\Fr{M},w',g' \SAT B$. So we've shown that
+          whenever $w,g \Img w',g'$, then $\Fr{M},w',g' \SAT B$. By definition
+          \ref{!SAT}, this means that $\Fr{M},w,g \SAT \Box B$. \qed
   \end{enumerate}
 \end{proof}
 
@@ -4509,21 +4499,21 @@ itself and (ii) $x$ is its own counterpart at $w$.
   \begin{proof}
     Assume first that some structure $\Fr{S} =\t{W,R,U,D,K}$ does not satisfy
     (i) and (ii). If some $w\in W$ is not $R$-related to itself, then
-    $w,V \not\SAT_{\Fr{S}} \Box P_0 \then P_0$, where $P_0$ is a zero-ary
+    $w,V \not\SAT \Box P_0 \then P_0$, where $P_0$ is a zero-ary
     predicate with $V_w(P_0) = 0$ and $V_{w'}(P_0) = 1$ for all $w'\not=w$. If
     some individual $d \in U_w$ is not a counterpart of itself at $w$ relative
     to some $C\in K_{w,w}$, then
-    $w,V \not\SAT_{\Fr{S}} \Box \neg Fx \then \neg Fx$, where $V_w(x)=d$,
+    $w,V \not\SAT \Box \neg Fx \then \neg Fx$, where $V_w(x)=d$,
     $V_w(F) = \{ d \}$, and $V_{w'}(F) = \emptyset$ for all $w' \not= w$. In the
     other direction, assume some instance of $\Box A \then A$ is false at some
     $w\in W$ in some structure $\Fr{S} =\t{W,R,U,D,K}$ under some interpretation
-    $V$ on $\Fr{S}$. Then $w,V \SAT_{\Fr{S}} \Box A$ and
-    $w,V \not\SAT_{\Fr{S}} A$. The former means that $w',V'\SAT_{\Fr{S}} A$
+    $V$ on $\Fr{S}$. Then $w,V \SAT \Box A$ and
+    $w,V \not\SAT A$. The former means that $w',V'\SAT A$
     whenever $wRw'$ and $V_w \Img V'_{w'}$. But if $R$ is reflexive, then $wRw$.
     Moreover, if there is a $C\in K_{w,w}$ for which $V_w(x) C V_{w}(x)$
     whenever $V_w(x)$ is defined, then $V_w \Img V'_{w'}$. Under these
-    conditions, it therefore follows that $w,V \SAT_{\Fr{S}} A$, which refutes
-    the assumption that $w,V \not\SAT_{\Fr{S}} \Box A \then A$.\qed
+    conditions, it therefore follows that $w,V \SAT A$, which refutes
+    the assumption that $w,V \not\SAT \Box A \then A$.\qed
   \end{proof}
 }
 
@@ -4647,12 +4637,7 @@ show that it holds.]
   assignments.
 
   We can regard each counterpart structure as a Kripke frame, with $\t{w,g}$
-  pairs as the points (``worlds'') and $\Img$ as the accessibility relation. To
-  interpret the language $\Sc{L}$ of quantified modal logic in these frames,
-  note that $\Sc{L}$ is a unimodal propositional language if we define a
-  ``sentence letters'' as any $\Sc{L}$-formula that isn't of the form
-  $\neg A, A \then B$ or $\Box A$. (So $\forall x \Box (Fx \then Gx)$, for
-  example, is a sentence letter.) Let's call such formulas \emph{quasi-atomic}.
+  pairs as the points (``worlds'') and $\Img$ as the accessibility relation.
 
   \begin{definition}[Opaque Propositional Guise]{\label{!OPAQUE}}
     The \emph{opaque propositional guise of a counterpart model}
@@ -4730,8 +4715,8 @@ show that it holds.]
   $M_{\Fr{S}} = \t{W_{\Fr{S}},R_{\Fr{S}}}$ is not in $F$. We know that there is
   some valuation $V$ on $M_{S}$ and some $\t{w,g} \in W_{S}$ s.t.
   $M_S,V,w,g \not\SAT_{0} A$. $V$ can assign to the proposition letters in $A$
-  arbitrary sets of $w,g$ pairs. When ask about validity on $\Fr{S}$, we have to
-  mimick this valuation with a substitution of sentences for the proposition
+  arbitrary sets of $w,g$ pairs. When we ask about validity on $\Fr{S}$, we have to
+  simulate this valuation with a substitution of sentences for the proposition
   letters and an interpretation $I$, so that the replacements of the sentence
   letters are true precisely at the $w,g$ pairs at which the original sentence
   letters are true in the guise. But how?
